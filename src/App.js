@@ -16,11 +16,14 @@ const data_array = readJSON();
 
 data_array.forEach((row)=>{
 
-  data.push({
-    // id:0,
-    name:row.Name,
-    image: "/images/" + row.Name + "_0.gif"
-  });
+  if(!String(row.Name).includes("Frank")){
+    data.push({
+      // id:0,
+      name:row.Name,
+      image: "/images/" + row.Name + "_0.gif"
+    });
+  }
+
 });
 console.log(data);
 
