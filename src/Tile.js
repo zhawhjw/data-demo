@@ -16,7 +16,7 @@ export default class Tile extends React.Component {
     _mouseEnter(e) {
         e.preventDefault();
         if (this.state.mouseOver === false) {
-            console.log(this.props.data.name);
+            // console.log(this.props.data.name);
             this.setState({
                 mouseOver: true
             })
@@ -64,22 +64,23 @@ export default class Tile extends React.Component {
             };
         } else {
             tileStyle = {
-                width: '18vw',
+                width: '25vw',
                 height: '18vw'
             };
         }
 
+        // console.log(process.env.PUBLIC_URL + this.props.data.image);
         return (
-            <div className="tile">
+            // <div className="tile">
                 <img
                     onMouseEnter={this._mouseEnter}
                     onMouseLeave={this._mouseLeave}
                     onClick={this._clickHandler}
-                    src={this.props.data.image}
+                    src={process.env.PUBLIC_URL + this.props.data.image}
                     alt={this.props.data.name}
                     style={tileStyle}
                 />
-            </div>
+            // </div>
         );
     }
 }

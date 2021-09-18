@@ -1,95 +1,68 @@
-import logo from './logo.svg';
-import { Ars } from 'ars-arsenal'
-import xhr from "xhr";
-
+import React from 'react';
+import Tiles from './Tiles'
+import ExtractData from "./data/extracted.json"
 import './App.css';
-import 'ars-arsenal/style.css';
 
 
-let options = {
-  autoComplete: true, // Show or hide autocomplete results
+// process.env.PUBLIC_URL
 
-  resource: 'photo', // the noun used for selection, i.e. "Pick a photo"
+function readJSON(){
+  return ExtractData.map((val, i) => val);
+}
 
-  // Configure the root element's HTML attributes. default = {}
-  rootAttributes: {
-    className: 'my-custom-class another-custom-class',
-    'data-test': 'my-integration-selector-helper'
-  },
+let data = [];
 
-  // The base URL for API interaction
-  url: 'photo/resource/endpoint',
+const data_array = readJSON();
 
-  // How to display the items. Can be "table" or "gallery"
-  mode: 'gallery',
+data_array.forEach((row)=>{
 
-  // What table columns to display, and in what order
-  columns: ['id', 'name', 'caption', 'attribution', 'preview'],
+  data.push({
+    // id:0,
+    name:row.Name,
+    image: "/images/" + row.Name + "_0.gif"
+  });
+});
+console.log(data);
 
-  multiselect: false,
+// eslint-disable-next-line array-callback-return
+let filteredData = data.filter((x) => {
+  if(String(x.name).includes("Sword_Shield")){
+    x.name = x.name.replace("Sword_Shield", "Sword&Shield");
+    x.image = x.image.replace("Sword_Shield", "Sword&Shield");
+  }
 
-  listUrl: function(url) {
-    // Used to build the URL that fetches lists of records.
-    return url
-  },
+  if(String(x.name).includes("Sword_Attack_SP_RLd")){
+    x.name = x.name.replace("Sword_Attack_SP_RLd", "Sword_Attack_Sp_RLd");
+    x.image = x.image.replace("Sword_Attack_SP_RLd", "Sword_Attack_Sp_RLd");
+  }
+  return x;
+});
 
-  listQuery: function({ search, page, sort }) {
-    // Use this function to rename query parameters before building
-    // the listUrl URL
-    //
-    // Any data returned from this function will be stringified into
-    // query parameters
-    return { search, page, sort }
-  },
+console.log(filteredData);
 
-  showUrl: function(url, id) {
-    // Used to build the URL that fetches a single record
-    return `${url}/${id}`
-  },
 
-  onError: function(response) {
-    // format errors before they are sent as a "string" value
-    // to the component
-    return response.code + ': ' + response.message
-  },
 
-  onFetch: function(response) {
-    // format the response, useful if you do not control the JSON
-    // response from your endpoint
-    return response.data
-  },
+// const data = [
+//   {
+//     id: 1,
+//     name: "hi",
+//     image: "/images/2Hand-Sword-Attack1_0.gif"
+//   },
+//
+// ];
 
-  onChange: function(id) {
-    // Whenever a new item is picked, this event is triggered
-    console.log('The value was changed to %s', id)
-  },
 
-  request: function(url, callback) {
-    // Behavior to configure networking. Return an XMLHTTPRequest
-    return xhr(url, callback)
-  },
-
-  logger: function(level, message) {
-    // Override this method to handle usage warnings and issues
-    // ArsArsenal considers errors with API interaction. Useful
-    // for monitoring.
-    switch (level) {
-      case 'warning':
-        console.warn(message)
-        break
-      case 'error':
-        console.error(message)
-        break
-      default:
-        console.log(message)
-        break
-    }
+class Dashboard extends React.Component {
+  render() {
+    return (
+        <Tiles data={this.props.data} />
+    );
   }
 }
 
 function App() {
   return (
-    <Ars options={options} />
+    <Dashboard data={filteredData} />
   );
 }
 
